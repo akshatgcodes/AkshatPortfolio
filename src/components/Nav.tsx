@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { navLinks } from '../data/nav'
 import { profile, socials } from '../data/profile'
 import { lockScroll, scrollToHash, scrollToTop } from '../lib/scroll'
+import { RollText } from './RollText'
 
 const ease = [0.76, 0, 0.24, 1] as const
 
@@ -112,8 +113,8 @@ export function FloatingNav({ onMenu }: { onMenu: () => void }) {
             </button>
             <nav className="hidden gap-6 sm:flex">
               {navLinks.slice(0, 3).map((l) => (
-                <a key={l.href} href={l.href} className="text-sm font-medium uppercase tracking-wider text-mist transition-opacity hover:opacity-70">
-                  {l.label}
+                <a key={l.href} href={l.href} className="text-sm font-medium uppercase tracking-wider text-mist">
+                  <RollText text={l.label} />
                 </a>
               ))}
             </nav>
@@ -124,7 +125,7 @@ export function FloatingNav({ onMenu }: { onMenu: () => void }) {
                 className="rounded-full px-5 py-2 text-xs font-medium uppercase tracking-widest text-white"
                 style={{ background: 'linear-gradient(123deg, #18011F 7%, #B600A8 37%, #7621B0 72%, #BE4C00 100%)' }}
               >
-                Contact
+                <RollText text="Contact" />
               </a>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { rollStrings } from '../lib/roll'
 
 const gradient = {
   background: 'linear-gradient(123deg, #18011F 7%, #B600A8 37%, #7621B0 72%, #BE4C00 100%)',
@@ -14,7 +15,7 @@ export function ContactButton({ href = '#contact', children = 'Contact Me' }: { 
       style={gradient}
       className="inline-block whitespace-nowrap rounded-full px-8 py-3 text-xs font-medium uppercase tracking-widest text-white transition-transform duration-200 hover:scale-[1.04] active:scale-[0.98] sm:px-10 sm:py-3.5 sm:text-sm md:px-12 md:py-4 md:text-base"
     >
-      {children}
+      {rollStrings(children)}
     </a>
   )
 }
@@ -30,7 +31,7 @@ export function GhostButton({ href, children, dark = false }: { href: string; ch
       rel="noreferrer"
       className={`inline-flex items-center gap-2 whitespace-nowrap rounded-full border-2 px-6 py-2.5 text-xs font-medium uppercase tracking-widest transition-colors duration-200 sm:px-8 sm:py-3 sm:text-sm ${tone}`}
     >
-      {children}
+      {rollStrings(children)}
     </a>
   )
 }

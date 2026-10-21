@@ -2,13 +2,16 @@ import { ArrowUpRight, Trophy } from 'lucide-react'
 import { GithubIcon } from '../components/BrandIcons'
 import { GhostButton } from '../components/Buttons'
 import { FadeIn } from '../components/FadeIn'
+import { RollText } from '../components/RollText'
 import { achievements } from '../data/achievements'
 
 export function Awards() {
   return (
     <section className="rounded-t-[40px] bg-white px-5 pb-32 pt-20 text-ink sm:rounded-t-[50px] sm:px-8 sm:pt-24 md:rounded-t-[60px] md:px-10 md:pb-40 md:pt-32">
       <FadeIn as="h2" y={40} className="mb-16 text-center font-black uppercase leading-none tracking-tight sm:mb-20 md:mb-24">
-        <span style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}>Awards</span>
+        <span style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}>
+          <RollText text="Awards" />
+        </span>
       </FadeIn>
 
       <div className="mx-auto flex max-w-6xl flex-col gap-6">
@@ -30,7 +33,9 @@ export function Awards() {
                 {a.award}
               </h3>
               <div className="border-t border-ink/15 pt-5">
-                <p className="text-xl font-medium uppercase sm:text-2xl">{a.project}</p>
+                <p className="text-xl font-medium uppercase sm:text-2xl">
+                  <RollText text={a.project} />
+                </p>
                 <p className="mt-2 font-light leading-relaxed opacity-70">{a.projectBlurb}</p>
               </div>
               <dl className="grid grid-cols-2 gap-4 text-sm">

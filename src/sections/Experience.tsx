@@ -1,4 +1,5 @@
 import { FadeIn } from '../components/FadeIn'
+import { RollText } from '../components/RollText'
 import { experience } from '../data/experience'
 import { education } from '../data/profile'
 
@@ -6,7 +7,9 @@ export function Experience() {
   return (
     <section id="experience" className="rounded-t-[40px] bg-white px-5 py-20 text-ink sm:rounded-t-[50px] sm:px-8 sm:py-24 md:rounded-t-[60px] md:px-10 md:py-32">
       <FadeIn as="h2" y={40} className="mb-16 text-center font-black uppercase leading-none tracking-tight sm:mb-20 md:mb-28">
-        <span style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}>Experience</span>
+        <span style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}>
+          <RollText text="Experience" />
+        </span>
       </FadeIn>
 
       <ol className="mx-auto max-w-5xl">
@@ -23,7 +26,7 @@ export function Experience() {
             <div className="flex min-w-0 flex-1 flex-col gap-2 pt-1 md:pt-3">
               <div className="flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between md:gap-6">
                 <h3 className="font-medium uppercase leading-tight" style={{ fontSize: 'clamp(1rem, 2.2vw, 2.1rem)' }}>
-                  {e.role}
+                  <RollText text={e.role} />
                 </h3>
                 <span className="shrink-0 text-xs uppercase tracking-widest opacity-60 sm:text-sm">{e.dates}</span>
               </div>

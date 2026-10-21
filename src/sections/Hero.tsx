@@ -3,6 +3,7 @@ import { FadeIn } from '../components/FadeIn'
 import { HeroSound } from '../components/HeroSound'
 import { Magnet } from '../components/Magnet'
 import { MenuButton } from '../components/Nav'
+import { RollText } from '../components/RollText'
 import { navLinks } from '../data/nav'
 import { profile } from '../data/profile'
 
@@ -14,9 +15,9 @@ export function Hero({ onMenu }: { onMenu: () => void }) {
           <a
             key={l.href}
             href={l.href}
-            className="hidden text-sm font-medium uppercase tracking-wider text-mist transition-opacity duration-200 hover:opacity-70 sm:block md:text-lg lg:text-[1.4rem]"
+            className="hidden text-sm font-medium uppercase tracking-wider text-mist sm:block md:text-lg lg:text-[1.4rem]"
           >
-            {l.label}
+            <RollText text={l.label} />
           </a>
         ))}
         <span className="text-sm font-medium uppercase tracking-wider text-mist sm:hidden">{profile.fullName}</span>
@@ -30,7 +31,7 @@ export function Hero({ onMenu }: { onMenu: () => void }) {
           y={40}
           className="hero-heading mt-6 w-full whitespace-nowrap text-center text-[12.4vw] font-black uppercase leading-none tracking-tight sm:mt-4 md:-mt-3 md:text-[13vw]"
         >
-          Hi, i&apos;m {profile.firstName}
+          <RollText text={`Hi, i'm ${profile.firstName}`} />
         </FadeIn>
       </div>
 

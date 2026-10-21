@@ -1,11 +1,14 @@
 import { FadeIn } from '../components/FadeIn'
+import { RollText } from '../components/RollText'
 import { skills } from '../data/skills'
 
 export function Skills() {
   return (
     <section className="relative z-10 -mt-10 rounded-t-[40px] bg-ink px-5 py-20 sm:-mt-12 sm:rounded-t-[50px] sm:px-8 sm:py-24 md:-mt-14 md:rounded-t-[60px] md:px-10 md:py-32">
       <FadeIn as="h2" y={40} className="hero-heading mb-16 text-center font-black uppercase leading-none tracking-tight sm:mb-20 md:mb-24">
-        <span style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}>Skills</span>
+        <span style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}>
+          <RollText text="Skills" />
+        </span>
       </FadeIn>
 
       <div className="mx-auto grid max-w-6xl gap-3 sm:grid-cols-2 lg:grid-cols-6">

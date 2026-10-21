@@ -2,6 +2,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { GithubIcon } from '../components/BrandIcons'
 import { FadeIn } from '../components/FadeIn'
+import { RollText } from '../components/RollText'
 import { socials } from '../data/profile'
 
 const USER = socials.github.split('/').pop()!
@@ -74,7 +75,7 @@ export function GithubActivity() {
             rel="noreferrer"
             className="inline-flex shrink-0 items-center gap-2 self-start rounded-full border-2 border-mist px-5 py-2 text-xs font-medium uppercase tracking-widest text-mist transition-colors hover:bg-mist/10 sm:self-auto sm:text-sm"
           >
-            <GithubIcon className="h-4 w-4" /> @{USER}
+            <GithubIcon className="h-4 w-4" /> <RollText text={`@${USER}`} />
           </a>
         </FadeIn>
 
@@ -121,7 +122,7 @@ export function GithubActivity() {
                   >
                     <div className="min-w-0">
                       <p className="flex items-center gap-2 text-base font-medium uppercase text-mist sm:text-lg">
-                        {r.name}
+                        <RollText text={r.name} />
                         <ArrowUpRight className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
                       </p>
                       {r.description && <p className="truncate text-sm font-light text-mist/55">{r.description}</p>}

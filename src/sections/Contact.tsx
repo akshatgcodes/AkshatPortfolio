@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { GithubIcon, LinkedinIcon } from '../components/BrandIcons'
 import { ContactButton } from '../components/Buttons'
 import { FadeIn } from '../components/FadeIn'
+import { RollText } from '../components/RollText'
 import { profile, socials } from '../data/profile'
 
 const links = [
@@ -30,7 +31,9 @@ export function Contact() {
     >
       <div className="flex flex-1 flex-col items-center justify-center gap-10 text-center">
         <FadeIn as="h2" y={40} className="hero-heading font-black uppercase leading-[0.9] tracking-tight">
-          <span style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}>Let&apos;s talk</span>
+          <span style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}>
+            <RollText text="Let's talk" />
+          </span>
         </FadeIn>
         <FadeIn delay={0.1} as="p" className="max-w-xl font-light leading-relaxed text-mist/70" >
           <span style={{ fontSize: 'clamp(1rem, 1.8vw, 1.25rem)' }}>
@@ -61,7 +64,7 @@ export function Contact() {
               rel="noreferrer"
               className="inline-flex items-center gap-2 rounded-full border-2 border-mist px-6 py-2.5 text-sm font-medium uppercase tracking-widest text-mist transition-colors hover:bg-mist/10"
             >
-              <Icon className="h-4 w-4" /> {label}
+              <Icon className="h-4 w-4" /> <RollText text={label} />
             </a>
           ))}
         </FadeIn>

@@ -3,6 +3,7 @@ import { Braces, Database, Rocket, Terminal, type LucideIcon } from 'lucide-reac
 import { AnimatedText } from '../components/AnimatedText'
 import { ContactButton } from '../components/Buttons'
 import { FadeIn } from '../components/FadeIn'
+import { RollText } from '../components/RollText'
 import { profile } from '../data/profile'
 
 const tiles: { Icon: LucideIcon; pos: string; size: string; x: number; delay: number; rotate: number }[] = [
@@ -44,7 +45,9 @@ export function About() {
       <div className="relative z-10 flex flex-col items-center gap-16 sm:gap-20 md:gap-24">
         <div className="flex flex-col items-center gap-10 sm:gap-14 md:gap-16">
           <FadeIn as="h2" y={40} className="hero-heading text-center font-black uppercase leading-none tracking-tight" >
-            <span style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}>About me</span>
+            <span style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}>
+              <RollText text="About me" />
+            </span>
           </FadeIn>
           <AnimatedText
             text={profile.about}

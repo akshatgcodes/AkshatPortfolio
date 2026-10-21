@@ -1,9 +1,10 @@
 import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
-import { GithubIcon as Github } from '../components/BrandIcons'
 import { useRef } from 'react'
+import { GithubIcon as Github } from '../components/BrandIcons'
 import { GhostButton } from '../components/Buttons'
 import { FadeIn } from '../components/FadeIn'
+import { RollText } from '../components/RollText'
 import { projects, type Project } from '../data/projects'
 
 const featured = projects.filter((p) => p.featured)
@@ -27,7 +28,7 @@ function StackCard({ project, index, total, progress }: { project: Project; inde
             <div className="flex min-w-0 flex-col gap-1">
               <span className="text-xs uppercase tracking-widest text-mist/60 sm:text-sm">{project.category}</span>
               <h3 className="font-medium uppercase leading-none text-mist" style={{ fontSize: 'clamp(1.4rem, 3vw, 2.6rem)' }}>
-                {project.name}
+                <RollText text={project.name} />
               </h3>
             </div>
           </div>
@@ -95,7 +96,9 @@ export function Projects() {
   return (
     <section id="projects" className="bg-ink px-4 pb-16 sm:px-8 md:px-10">
       <FadeIn as="h2" y={40} className="hero-heading pb-6 text-center font-black uppercase leading-none tracking-tight">
-        <span style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}>Projects</span>
+        <span style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}>
+          <RollText text="Projects" />
+        </span>
       </FadeIn>
 
       <div ref={container} className="pb-[12vh]">
@@ -123,17 +126,19 @@ export function Projects() {
                 </a>
                 <div className="flex flex-1 flex-col gap-3 p-5 sm:p-6">
                   <div className="flex items-baseline justify-between gap-3">
-                    <h4 className="text-xl font-medium uppercase text-mist">{p.name}</h4>
+                    <h4 className="text-xl font-medium uppercase text-mist">
+                      <RollText text={p.name} />
+                    </h4>
                     <span className="text-xs uppercase tracking-widest text-mist/50">{p.category}</span>
                   </div>
                   <p className="text-sm font-light leading-relaxed text-mist/65">{p.description}</p>
                   <p className="text-xs text-mist/50">{p.stack.join(' · ')}</p>
                   <div className="mt-auto flex gap-4 pt-2 text-sm font-medium uppercase tracking-widest text-mist">
-                    <a href={p.live} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:opacity-70">
-                      Live <ArrowUpRight className="h-4 w-4" />
+                    <a href={p.live} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1">
+                      <RollText text="Live" /> <ArrowUpRight className="h-4 w-4" />
                     </a>
-                    <a href={p.repo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:opacity-70">
-                      <Github className="h-4 w-4" /> Code
+                    <a href={p.repo} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1">
+                      <Github className="h-4 w-4" /> <RollText text="Code" />
                     </a>
                   </div>
                 </div>
