@@ -21,18 +21,18 @@ export function Loader({ onDone }: { onDone: () => void }) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-[100] flex flex-col justify-between bg-ink px-6 py-7 md:px-10 md:py-10"
+      className="fixed inset-0 z-[100] flex flex-col justify-between bg-ink px-5 py-6 sm:px-8 md:px-10 md:py-9"
       exit={{ y: '-100%' }}
       transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
       aria-hidden="true"
     >
-      <span className="text-sm uppercase tracking-widest text-mist/60">{profile.role}</span>
-      <div className="flex justify-center overflow-hidden">
-        {profile.firstName.toUpperCase().split('').map((ch, i) => (
+      <span className="label text-muted">{profile.role}</span>
+      <div className="flex overflow-hidden">
+        {profile.firstName.split('').map((ch, i) => (
           <motion.span
             key={i}
-            className="hero-heading font-black leading-none"
-            style={{ fontSize: 'clamp(4rem, 18vw, 260px)' }}
+            className="display italic"
+            style={{ fontSize: 'clamp(5rem, 20vw, 320px)' }}
             initial={{ y: '110%' }}
             animate={{ y: 0 }}
             transition={{ delay: 0.1 + i * 0.07, duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
@@ -41,11 +41,9 @@ export function Loader({ onDone }: { onDone: () => void }) {
           </motion.span>
         ))}
       </div>
-      <div className="flex items-end justify-between">
-        <span className="text-sm uppercase tracking-widest text-mist/60">{profile.location}</span>
-        <motion.span className="font-black text-mist" style={{ fontSize: 'clamp(2rem, 6vw, 5rem)' }}>
-          {rounded}
-        </motion.span>
+      <div className="flex items-end justify-between border-t border-rule pt-4">
+        <span className="label text-muted">{profile.location}</span>
+        <motion.span className="label text-signal">{rounded}</motion.span>
       </div>
     </motion.div>
   )

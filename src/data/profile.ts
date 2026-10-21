@@ -9,7 +9,11 @@ export const profile = {
   photo: '/akshat.webp',
   about:
     "I'm a final-year B.Tech Computer Science student at SRMIST who builds full-stack web apps and practical tools: backends, APIs, databases and the interfaces on top of them. Right now I'm an iOS & AI Engineering Intern at BizCareerChaos. Let's build something that actually works!",
-  facts: ['Delhi, India', 'B.Tech CSE · SRMIST', 'Class of 2027'],
+  facts: [
+    ['Based in', 'Delhi, India'],
+    ['Studying', 'B.Tech CSE, SRMIST — class of 2027'],
+    ['Focus', 'Backends, APIs, databases, web apps'],
+  ],
 }
 
 export const education = {

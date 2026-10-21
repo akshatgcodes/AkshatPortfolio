@@ -6,7 +6,7 @@ type PlayState = 'idle' | 'loading' | 'playing' | 'paused' | 'error'
 
 const BAR = 4
 const GAP = 5
-const STOPS = ['#BE4C00', '#B600A8', '#7621B0']
+const SIGNAL = '#FF4F1A'
 
 // Preview URLs are looked up (in one request) on first play rather than hardcoded, since
 // Apple rotates them. Tracks without a preview are dropped from the rotation.
@@ -56,16 +56,14 @@ export function useHeroSound() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       ctx.clearRect(0, 0, w, h)
 
-      const mid = h * (w < 1024 ? 0.54 : 0.6)
+      const mid = h * (w < 1024 ? 0.48 : 0.6)
       const maxH = h * (w < 1024 ? 0.2 : 0.3)
       const perSide = Math.floor(w / 2 / (BAR + GAP))
       const live = analyser.current
       if (live) live.getByteFrequencyData(bins)
       if (levels.length !== perSide) levels = Array(perSide).fill(0)
 
-      const grad = ctx.createLinearGradient(0, mid - maxH, 0, mid + maxH)
-      STOPS.forEach((c, i) => grad.addColorStop(i / (STOPS.length - 1), c))
-      ctx.fillStyle = grad
+      ctx.fillStyle = SIGNAL
 
       for (let i = 0; i < perSide; i++) {
         const d = i / perSide
@@ -77,7 +75,7 @@ export function useHeroSound() {
             : 0.1 + 0.08 * Math.sin(t / 700 - i * 0.22) * Math.cos(t / 1300 + i * 0.07)
         levels[i] += (target - levels[i]) * 0.25
         const bh = Math.max(3, levels[i] * maxH)
-        ctx.globalAlpha = 0.85 * (1 - d * 0.8)
+        ctx.globalAlpha = (live ? 0.9 : 0.55) * (1 - d * 0.85)
         for (const side of [-1, 1]) {
           const x = w / 2 + side * (i * (BAR + GAP) + GAP / 2) - (side < 0 ? BAR : 0)
           ctx.beginPath()

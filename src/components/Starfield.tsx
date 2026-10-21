@@ -3,7 +3,8 @@ import { useEffect, useRef } from 'react'
 type Star = { x: number; y: number; r: number; a: number; speed: number; phase: number; depth: number; color: string }
 type Shooter = { x: number; y: number; vx: number; vy: number; life: number }
 
-const TINTS = ['215,226,234', '215,226,234', '215,226,234', '215,226,234', '182,0,168', '190,76,0']
+// Bone white, with the odd star in the signal colour.
+const TINTS = ['237,234,227', '237,234,227', '237,234,227', '237,234,227', '237,234,227', '255,79,26']
 
 function makeStars(w: number, h: number): Star[] {
   const count = Math.round((w * h) / 1900)
@@ -81,8 +82,8 @@ export function Starfield() {
         if (shooter) {
           const s = shooter
           const tail = ctx.createLinearGradient(s.x, s.y, s.x - s.vx * 12, s.y - s.vy * 12)
-          tail.addColorStop(0, `rgba(215,226,234,${s.life})`)
-          tail.addColorStop(1, 'rgba(215,226,234,0)')
+          tail.addColorStop(0, `rgba(237,234,227,${s.life})`)
+          tail.addColorStop(1, 'rgba(237,234,227,0)')
           ctx.strokeStyle = tail
           ctx.lineWidth = 1.4
           ctx.beginPath()

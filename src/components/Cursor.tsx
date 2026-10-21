@@ -52,16 +52,16 @@ export function Cursor() {
         animate={{
           width: size,
           height: size,
-          backgroundColor: mode === 'view' ? 'rgba(215,226,234,1)' : 'rgba(215,226,234,0)',
-          borderColor: mode === 'view' ? 'rgba(215,226,234,0)' : 'rgba(215,226,234,1)',
+          backgroundColor: mode === 'view' ? 'rgba(255,79,26,1)' : 'rgba(237,234,227,0)',
+          borderColor: mode === 'view' ? 'rgba(255,79,26,0)' : 'rgba(237,234,227,1)',
         }}
         transition={{ duration: 0.25, ease: 'easeOut' }}
       >
         <span className="absolute inset-0 rounded-full border-[1.5px]" style={{ borderColor: 'inherit' }} />
-        {mode === 'view' && <span className="text-xs font-medium tracking-widest text-ink">VIEW</span>}
+        {mode === 'view' && <span className="label text-ink">View</span>}
       </motion.div>
       <motion.div
-        className="absolute left-0 top-0 h-1.5 w-1.5 rounded-full bg-mist"
+        className="absolute left-0 top-0 h-1.5 w-1.5 rounded-full bg-bone"
         style={{ x, y, translateX: '-50%', translateY: '-50%', opacity: mode === 'view' ? 0 : 1, mixBlendMode: 'difference' }}
       />
     </div>

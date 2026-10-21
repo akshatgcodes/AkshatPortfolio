@@ -1,16 +1,11 @@
-import { Check, Copy, Mail } from 'lucide-react'
 import { useState } from 'react'
-import { GithubIcon, LinkedinIcon } from '../components/BrandIcons'
-import { GhostButton, PrimaryButton } from '../components/Buttons'
+import { ArrowLink } from '../components/Buttons'
 import { FadeIn } from '../components/FadeIn'
 import { RollText } from '../components/RollText'
+import { SectionHead } from '../components/SectionHead'
 import { profile, socials } from '../data/profile'
 
-const links = [
-  { label: 'GitHub', href: socials.github, Icon: GithubIcon },
-  { label: 'LinkedIn', href: socials.linkedin, Icon: LinkedinIcon },
-]
-
+// The email itself is the closing CTA, set as large as a heading.
 export function Contact() {
   const [copied, setCopied] = useState(false)
 
@@ -25,50 +20,42 @@ export function Contact() {
   }
 
   return (
-    <section
-      id="contact"
-      className="relative z-10 -mt-10 flex min-h-[90svh] flex-col rounded-t-[40px] bg-ink px-5 pt-20 sm:-mt-12 sm:rounded-t-[50px] sm:px-8 sm:pt-24 md:-mt-14 md:rounded-t-[60px] md:px-10 md:pt-32"
-    >
-      <div className="flex flex-1 flex-col items-center justify-center gap-10 text-center">
-        <FadeIn as="h2" y={40} className="hero-heading font-black uppercase leading-[0.9] tracking-tight">
-          <span style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}>
-            <RollText text="Let's talk" />
-          </span>
+    <section id="contact" className="flex min-h-[90svh] flex-col px-5 pt-24 sm:px-8 md:px-10 md:pt-36">
+      <SectionHead index="07" label="Contact" title="Let’s build" accent="something." />
+      <div className="grid flex-1 grid-cols-12 gap-x-6 gap-y-8">
+        <FadeIn as="p" className="col-span-12 max-w-[36ch] leading-relaxed text-bone/80 md:col-span-3">
+          Open to internships, full-time roles and interesting side projects. Email is the fastest way to reach me.
         </FadeIn>
-        <FadeIn delay={0.1} as="p" className="max-w-xl leading-relaxed text-mist/75">
-          <span style={{ fontSize: 'clamp(1rem, 1.8vw, 1.25rem)' }}>
-            Open to internships, full-time roles and interesting side projects. The fastest way to reach me is email.
-          </span>
-        </FadeIn>
-        <FadeIn delay={0.2} className="flex flex-col items-center gap-5">
-          <PrimaryButton href={`mailto:${socials.email}`}>
-            <span className="inline-flex items-center gap-2">
-              <Mail className="h-4 w-4" /> {socials.email}
-            </span>
-          </PrimaryButton>
-          <button
-            type="button"
-            onClick={copy}
-            className="inline-flex items-center gap-2 text-sm uppercase tracking-widest text-mist/70 transition-opacity hover:opacity-70"
+        <FadeIn delay={0.1} className="col-span-12 md:col-span-9">
+          <a
+            href={`mailto:${socials.email}`}
+            className="display link break-all text-signal transition-colors hover:text-bone"
+            style={{ fontSize: 'clamp(2.1rem, 6.4vw, 104px)' }}
           >
-            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            <span aria-live="polite">{copied ? 'Copied' : 'Copy email'}</span>
-          </button>
-        </FadeIn>
-        <FadeIn delay={0.3} className="flex gap-3">
-          {links.map(({ label, href, Icon }) => (
-            <GhostButton key={label} href={href}>
-              <Icon className="h-4 w-4" /> {label}
-            </GhostButton>
-          ))}
+            {socials.email}
+          </a>
+          <div className="mt-8 flex flex-wrap gap-x-8 gap-y-2">
+            <button type="button" onClick={copy} className="link label min-h-11 text-bone">
+              <span aria-live="polite">{copied ? 'Copied ✓' : 'Copy email'}</span>
+            </button>
+            <ArrowLink href={socials.github} className="text-bone">
+              GitHub ↗
+            </ArrowLink>
+            <ArrowLink href={socials.linkedin} className="text-bone">
+              LinkedIn ↗
+            </ArrowLink>
+          </div>
         </FadeIn>
       </div>
 
-      <footer className="mt-20 flex flex-col items-center justify-between gap-2 border-t border-mist/10 py-6 text-xs uppercase tracking-widest text-mist/50 sm:flex-row">
-        <span>
+      <footer className="label mt-24 grid grid-cols-12 gap-x-6 gap-y-2 border-t border-rule py-6 text-muted">
+        <span className="col-span-12 md:col-span-3">
           © {new Date().getFullYear()} {profile.fullName}
         </span>
-        <span>{profile.location}</span>
+        <span className="col-span-12 md:col-span-4">{profile.location}</span>
+        <span className="col-span-12 md:col-span-5 md:text-right">
+          <RollText text="Set in Instrument Serif, Geist & Geist Mono" />
+        </span>
       </footer>
     </section>
   )

@@ -1,49 +1,42 @@
 import { FadeIn } from '../components/FadeIn'
 import { RollText } from '../components/RollText'
-import { SectionHeading } from '../components/SectionHeading'
+import { SectionHead } from '../components/SectionHead'
 import { experience } from '../data/experience'
 import { education } from '../data/profile'
 
+// The one light section: bone paper, ink text, so the CV part reads like a printed page.
 export function Experience() {
   return (
-    <section id="experience" className="rounded-t-[40px] bg-white px-5 py-20 text-ink sm:rounded-t-[50px] sm:px-8 sm:py-24 md:rounded-t-[60px] md:px-10 md:py-32">
-      <SectionHeading eyebrow="Where I've worked" title="Experience" dark />
-
-      <ol className="mx-auto max-w-5xl">
+    <section id="experience" className="bg-bone px-5 py-24 text-ink sm:px-8 md:px-10 md:py-36">
+      <SectionHead index="04" label="Experience" title="Where I’ve" accent="worked" light />
+      <ol>
         {experience.map((e, i) => (
-          <FadeIn
-            as="li"
-            key={e.company}
-            delay={i * 0.1}
-            className="flex gap-5 border-t py-8 sm:gap-8 sm:py-10 md:gap-12 md:py-12"
-          >
-            <span className="font-black leading-[0.8]" style={{ fontSize: 'clamp(3rem, 10vw, 140px)' }}>
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            <div className="flex min-w-0 flex-1 flex-col gap-2 pt-1 md:pt-3">
-              <div className="flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between md:gap-6">
-                <h3 className="font-medium uppercase leading-tight" style={{ fontSize: 'clamp(1rem, 2.2vw, 2.1rem)' }}>
-                  <RollText text={e.role} />
-                </h3>
-                <span className="shrink-0 text-xs uppercase tracking-widest opacity-70 sm:text-sm">{e.dates}</span>
-              </div>
-              <p className="text-sm font-medium uppercase tracking-wider sm:text-base">
-                {e.company} <span className="opacity-50">· {e.mode}</span>
-              </p>
-              <p className="max-w-2xl leading-relaxed opacity-70" style={{ fontSize: 'clamp(0.85rem, 1.6vw, 1.25rem)' }}>
-                {e.summary}
+          <FadeIn as="li" key={e.company} delay={i * 0.08} y={20} className="grid grid-cols-12 gap-x-6 gap-y-3 border-t border-ink/20 py-8 md:py-10">
+            <div className="col-span-12 md:col-span-3">
+              <p className="label text-ink/60">{e.dates}</p>
+              <p className="label mt-1 text-ink/45">{e.mode}</p>
+            </div>
+            <div className="col-span-12 md:col-span-4">
+              <h3 className="display" style={{ fontSize: 'clamp(1.9rem, 3vw, 2.75rem)' }}>
+                <RollText text={e.role} />
+              </h3>
+              <p className="label mt-2">
+                <span className="mr-2 inline-block h-1.5 w-1.5 bg-signal align-middle" aria-hidden="true" />
+                {e.company}
               </p>
             </div>
+            <p className="col-span-12 max-w-[60ch] leading-relaxed text-ink/75 md:col-span-5">{e.summary}</p>
           </FadeIn>
         ))}
-        <FadeIn as="li" delay={experience.length * 0.1} className="flex flex-col gap-1 border-y py-8 sm:flex-row sm:items-baseline sm:justify-between sm:py-10">
-          <p className="font-medium uppercase" style={{ fontSize: 'clamp(1rem, 2.2vw, 2.1rem)' }}>
-            Education
-          </p>
-          <p className="text-sm uppercase tracking-wider opacity-70 sm:text-right sm:text-base">
-            {education.degree} · {education.school}
-            <br className="hidden sm:block" /> <span className="opacity-70">{education.dates}</span>
-          </p>
+        <FadeIn as="li" delay={experience.length * 0.08} y={20} className="grid grid-cols-12 gap-x-6 gap-y-3 border-y border-ink/20 py-8 md:py-10">
+          <p className="label col-span-12 text-ink/60 md:col-span-3">{education.dates}</p>
+          <div className="col-span-12 md:col-span-4">
+            <h3 className="display" style={{ fontSize: 'clamp(1.9rem, 3vw, 2.75rem)' }}>
+              <RollText text={education.degree} />
+            </h3>
+            <p className="label mt-2">Education</p>
+          </div>
+          <p className="col-span-12 leading-relaxed text-ink/75 md:col-span-5">{education.school}</p>
         </FadeIn>
       </ol>
     </section>

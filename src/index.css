@@ -13,23 +13,23 @@
 html,
 body,
 #root {
-  background: #0c0c0c;
-  font-family: 'Kanit', sans-serif;
+  background: #0b0b0c;
+  color: #edeae3;
+  font-family: 'Geist', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 html {
   scroll-behavior: smooth;
 }
 
-.hero-heading {
-  background: linear-gradient(180deg, #646973 0%, #bbccd7 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+::selection {
+  background: #ff4f1a;
+  color: #0b0b0c;
 }
 
 :focus-visible {
-  outline: 2px solid #d7e2ea;
+  outline: 2px solid #ff4f1a;
   outline-offset: 3px;
 }
 
@@ -44,6 +44,26 @@ html.custom-cursor * {
   cursor: none !important;
 }
 
+@layer components {
+  /* Mono metadata: section indices, dates, stacks, small labels. */
+  .label {
+    @apply font-mono text-[11px] uppercase tracking-label sm:text-xs;
+  }
+  /* Display headings: serif, tight, with italics for emphasis. */
+  .display {
+    @apply font-display font-normal leading-[0.92] tracking-[-0.02em];
+  }
+  /* Text links with an underline that draws in from the left. */
+  .link {
+    @apply relative inline-flex items-center gap-1.5;
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    transition: background-size 0.35s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .link:hover,
+  .link:focus-visible {
+    background-size: 100% 1px;
+  }
+}
 
 /* Letter roll, see RollText.tsx */
 /* clip-path rather than overflow so commas and descenders aren't cut; the copy waits 0.3em below the clip. */
@@ -51,7 +71,7 @@ html.custom-cursor * {
   position: relative;
   display: inline-block;
   vertical-align: top;
-  clip-path: inset(-0.04em -0.1em -0.2em -0.1em);
+  clip-path: inset(-0.04em -0.1em -0.25em -0.1em);
 }
 .roll-char > span {
   display: block;
@@ -62,15 +82,6 @@ html.custom-cursor * {
   position: absolute;
   left: 0;
   top: calc(100% + 0.3em);
-}
-/* background-clip: text breaks (grey boxes) on letters mid-transform in Chrome, so rolling
-   gradient headings get solid text faded by a mask instead, which looks the same on #0C0C0C. */
-.hero-heading:has(.roll) {
-  background: none;
-  color: #bbccd7;
-  -webkit-text-fill-color: #bbccd7;
-  -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, #000 100%);
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, #000 100%);
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   :is(a, button, .roll):hover .roll-char > span {

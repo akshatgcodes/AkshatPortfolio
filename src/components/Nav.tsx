@@ -1,8 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { navLinks } from '../data/nav'
-import { profile, socials } from '../data/profile'
+import { socials } from '../data/profile'
 import { lockScroll, scrollToHash, scrollToTop } from '../lib/scroll'
 import { RollText } from './RollText'
 
@@ -10,13 +9,8 @@ const ease = [0.76, 0, 0.24, 1] as const
 
 export function MenuButton({ onClick, className = '' }: { onClick: () => void; className?: string }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-haspopup="dialog"
-      className={`text-sm font-medium uppercase tracking-wider text-mist transition-opacity hover:opacity-70 ${className}`}
-    >
-      Menu
+    <button type="button" onClick={onClick} aria-haspopup="dialog" className={`label min-h-11 text-bone ${className}`}>
+      Menu <span className="text-signal">+</span>
     </button>
   )
 }
@@ -43,19 +37,19 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
           role="dialog"
           aria-modal="true"
           aria-label="Menu"
-          className="fixed inset-0 z-[90] flex flex-col bg-ink px-6 pb-8 pt-6"
+          className="fixed inset-0 z-[90] flex flex-col bg-ink px-5 pb-8 pt-5"
           initial={{ clipPath: 'inset(0 0 100% 0)' }}
           animate={{ clipPath: 'inset(0 0 0% 0)' }}
           exit={{ clipPath: 'inset(0 0 100% 0)' }}
           transition={{ duration: 0.6, ease }}
         >
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium uppercase tracking-wider text-mist">{profile.fullName}</span>
-            <button ref={closeRef} type="button" onClick={onClose} aria-label="Close menu" className="p-1 text-mist">
-              <X className="h-6 w-6" />
+            <span className="font-display text-2xl italic">ag</span>
+            <button ref={closeRef} type="button" onClick={onClose} className="label min-h-11 text-bone">
+              Close <span className="text-signal">×</span>
             </button>
           </div>
-          <nav className="flex flex-1 flex-col justify-center gap-2">
+          <nav className="flex flex-1 flex-col justify-center">
             {navLinks.map((l, i) => (
               <motion.a
                 key={l.href}
@@ -66,19 +60,20 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
                   // Wait for the menu to release the scroll lock before moving.
                   setTimeout(() => scrollToHash(l.href), 50)
                 }}
-                className="hero-heading text-[13vw] font-black uppercase leading-[1.05]"
-                initial={{ y: 40, opacity: 0 }}
+                className="flex items-baseline gap-4 border-t border-rule py-3"
+                initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.25 + i * 0.06, duration: 0.5 }}
               >
-                {l.label}
+                <span className="label text-signal">0{i + 1}</span>
+                <span className="display text-[15vw]">{l.label}</span>
               </motion.a>
             ))}
           </nav>
-          <div className="flex justify-between text-xs uppercase tracking-widest text-mist/60">
-            <a href={`mailto:${socials.email}`}>Email</a>
-            <a href={socials.github} target="_blank" rel="noreferrer">GitHub</a>
-            <a href={socials.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+          <div className="label flex justify-between text-muted">
+            <a href={`mailto:${socials.email}`}>Email ↗</a>
+            <a href={socials.github} target="_blank" rel="noreferrer">GitHub ↗</a>
+            <a href={socials.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
           </div>
         </motion.div>
       )}
@@ -86,7 +81,7 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
   )
 }
 
-// Compact bar that drops in once the hero (and its own nav) has scrolled away.
+// A thin full-width bar with a hairline, dropping in once the hero has scrolled away.
 export function FloatingNav({ onMenu }: { onMenu: () => void }) {
   const [shown, setShown] = useState(false)
 
@@ -101,33 +96,25 @@ export function FloatingNav({ onMenu }: { onMenu: () => void }) {
     <AnimatePresence>
       {shown && (
         <motion.header
-          className="fixed inset-x-0 top-3 z-[80] flex justify-center px-3 sm:top-4"
-          initial={{ y: -80 }}
+          className="fixed inset-x-0 top-0 z-[80] border-b border-rule bg-ink/80 backdrop-blur-md"
+          initial={{ y: -70 }}
           animate={{ y: 0 }}
-          exit={{ y: -80 }}
+          exit={{ y: -70 }}
           transition={{ duration: 0.45, ease }}
         >
-          <div className="flex w-full max-w-3xl items-center justify-between gap-4 rounded-full border border-mist/15 bg-ink/70 py-2 pl-5 pr-2 backdrop-blur-md">
-            <button type="button" onClick={scrollToTop} className="hero-heading text-lg font-black" aria-label="Back to top">
-              AG
+          <div className="grid grid-cols-12 items-center gap-x-6 px-5 py-2 sm:px-8 md:px-10">
+            <button type="button" onClick={scrollToTop} className="col-span-6 min-h-11 text-left md:col-span-3" aria-label="Back to top">
+              <span className="font-display text-xl italic">ag</span>
             </button>
-            <nav className="hidden gap-6 sm:flex">
-              {navLinks.slice(0, 3).map((l) => (
-                <a key={l.href} href={l.href} className="text-sm font-medium uppercase tracking-wider text-mist">
+            <nav className="col-span-9 hidden justify-end gap-7 md:flex">
+              {navLinks.map((l, i) => (
+                <a key={l.href} href={l.href} className={`label transition-colors ${l.href === '#contact' ? 'text-signal hover:text-bone' : 'text-muted hover:text-bone'}`}>
+                  <span className="mr-1.5 opacity-60">0{i + 1}</span>
                   <RollText text={l.label} />
                 </a>
               ))}
             </nav>
-            <div className="flex items-center gap-3">
-              <MenuButton onClick={onMenu} className="sm:hidden" />
-              <a
-                href="#contact"
-                className="rounded-full px-5 py-2 text-xs font-medium uppercase tracking-widest text-white"
-                style={{ background: 'linear-gradient(123deg, #18011F 7%, #B600A8 37%, #7621B0 72%, #BE4C00 100%)' }}
-              >
-                <RollText text="Contact" />
-              </a>
-            </div>
+            <MenuButton onClick={onMenu} className="col-span-6 justify-self-end md:hidden" />
           </div>
         </motion.header>
       )}

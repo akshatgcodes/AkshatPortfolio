@@ -25,7 +25,7 @@ export function Marquee() {
   }, [])
 
   return (
-    <section ref={ref} className="flex flex-col gap-3 overflow-hidden bg-ink pb-10 pt-24 sm:pt-32 md:pt-40" aria-label="Project screenshots">
+    <section ref={ref} className="flex flex-col gap-3 overflow-hidden border-y border-rule bg-ink py-3" aria-label="Project screenshots">
       {rows.map((row, r) => (
         <div
           key={r}
@@ -41,7 +41,7 @@ export function Marquee() {
               decoding="async"
               width={420}
               height={263}
-              className="h-[180px] w-[288px] shrink-0 rounded-2xl object-cover sm:h-[263px] sm:w-[420px]"
+              className="h-[160px] w-[256px] shrink-0 object-cover opacity-80 sm:h-[220px] sm:w-[352px]"
             />
           ))}
         </div>

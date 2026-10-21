@@ -1,57 +1,56 @@
-import { ArrowDown } from 'lucide-react'
-import { GhostButton, PrimaryButton } from '../components/Buttons'
+import { ArrowLink, PrimaryButton } from '../components/Buttons'
 import { FadeIn } from '../components/FadeIn'
 import { SoundControls, SoundWaves } from '../components/HeroSound'
 import { Magnet } from '../components/Magnet'
 import { MenuButton } from '../components/Nav'
 import { RollText } from '../components/RollText'
 import { Starfield } from '../components/Starfield'
+import { experience } from '../data/experience'
 import { navLinks } from '../data/nav'
 import { profile } from '../data/profile'
 import { useHeroSound } from '../lib/useHeroSound'
 
-// Reading order: 1. the name (biggest), 2. what Akshat does + the tagline, 3. "View my work".
-// Nav and the music controls are deliberately quieter than all three.
+// Reading order: 1. the name, split across the frame with the photo standing in front of it,
+// 2. role + tagline, 3. the one solid CTA. Nav, metadata and music stay in small mono.
 export function Hero({ onMenu }: { onMenu: () => void }) {
   const sound = useHeroSound()
+  const now = experience[0]
 
   return (
-    <section className="relative flex h-[100svh] min-h-[640px] flex-col" style={{ overflowX: 'clip' }}>
+    <section id="top" className="relative flex h-[100svh] min-h-[640px] flex-col overflow-hidden">
       <Starfield />
-
-      <FadeIn as="nav" y={-20} className="relative z-20 flex items-center justify-between px-6 pt-6 md:px-10 md:pt-8">
-        {navLinks.map((l) => (
-          <a
-            key={l.href}
-            href={l.href}
-            className="hidden text-sm font-medium uppercase tracking-[0.15em] text-mist/70 transition-colors hover:text-mist sm:block md:text-base"
-          >
-            <RollText text={l.label} />
-          </a>
-        ))}
-        <span className="text-sm font-medium uppercase tracking-[0.15em] text-mist/70 sm:hidden">{profile.fullName}</span>
-        <MenuButton onClick={onMenu} className="sm:hidden" />
-      </FadeIn>
-
-      <div className="overflow-hidden">
-        <FadeIn
-          as="h1"
-          delay={0.15}
-          y={40}
-          className="hero-heading mt-5 w-full text-center text-[21vw] font-black uppercase leading-[0.88] tracking-tight sm:text-[17vw] lg:-mt-2 lg:whitespace-nowrap lg:text-[13vw] lg:leading-none"
-        >
-          <RollText text="Hi, i'm" />
-          <br className="lg:hidden" />
-          <span className="hidden lg:inline"> </span>
-          <RollText text={profile.firstName} />
-        </FadeIn>
-      </div>
-
       <SoundWaves sound={sound} />
 
+      <FadeIn as="nav" y={-12} className="relative z-30 grid grid-cols-12 items-center gap-x-6 px-5 pt-5 sm:px-8 md:px-10 md:pt-7">
+        <a href="#top" className="col-span-6 md:col-span-3" aria-label="Akshat Gupta, home">
+          <span className="font-display text-2xl italic">ag</span>
+          <span className="label ml-3 text-muted">Portfolio ’26</span>
+        </a>
+        <div className="col-span-6 hidden justify-end gap-7 md:col-span-9 md:flex">
+          {navLinks.map((l, i) => (
+            <a key={l.href} href={l.href} className="label text-muted transition-colors hover:text-bone">
+              <span className="mr-1.5 text-signal">0{i + 1}</span>
+              <RollText text={l.label} />
+            </a>
+          ))}
+        </div>
+        <MenuButton onClick={onMenu} className="col-span-6 justify-self-end md:hidden" />
+      </FadeIn>
+
+      {/* The name sits behind the photo (z-0 vs z-10): line one hugs the left, line two the right. */}
+      <h1 className="display pointer-events-none relative z-0 mt-6 px-5 sm:px-8 md:mt-2 md:px-10" style={{ fontSize: 'clamp(5.5rem, 17vw, 300px)' }}>
+        <FadeIn as="span" delay={0.1} y={40} className="block">
+          <RollText text="Hi, I’m" />
+        </FadeIn>
+        <FadeIn as="span" delay={0.2} y={40} className="-mt-[0.12em] block text-right italic">
+          <RollText text={profile.firstName} />
+          <span className="not-italic text-signal">.</span>
+        </FadeIn>
+      </h1>
+
       {/* Positioning lives on a plain wrapper: FadeIn animates transform and would clobber the translate classes. */}
-      <div className="absolute left-1/2 top-[54%] z-10 w-[min(62vw,40svh)] -translate-x-1/2 -translate-y-1/2 lg:bottom-0 lg:top-auto lg:w-[min(460px,58svh)] lg:translate-y-0 xl:w-[min(520px,62svh)]">
-        <FadeIn delay={0.6} y={30}>
+      <div className="absolute left-1/2 top-[48%] z-10 w-[min(64vw,37svh)] -translate-x-1/2 -translate-y-1/2 lg:bottom-0 lg:top-auto lg:w-[min(460px,60svh)] lg:translate-y-0 xl:w-[min(520px,64svh)]">
+        <FadeIn delay={0.5} y={30}>
           <Magnet padding={150} strength={5}>
             <img
               src={profile.photo}
@@ -60,38 +59,33 @@ export function Hero({ onMenu }: { onMenu: () => void }) {
               height={959}
               fetchPriority="high"
               draggable={false}
-              className="w-full select-none [mask-image:linear-gradient(to_bottom,black_80%,transparent)] lg:[mask-image:none]"
+              className="w-full select-none [mask-image:linear-gradient(to_bottom,black_75%,transparent)] lg:[mask-image:none]"
             />
           </Magnet>
         </FadeIn>
       </div>
 
-      {/* Desktop: the music sits on the wave line, away from the CTAs. */}
-      <div className="absolute right-6 top-[60%] z-20 hidden -translate-y-1/2 md:right-10 lg:block">
-        <FadeIn delay={0.8} y={0}>
-          <SoundControls sound={sound} />
-        </FadeIn>
-      </div>
-
-      <div className="relative z-20 mt-auto flex flex-col gap-5 px-6 pb-7 sm:pb-8 md:px-10 md:pb-10 lg:flex-row lg:items-end lg:justify-between">
-        <FadeIn delay={0.35} y={20} className="flex max-w-[min(100%,420px)] flex-col gap-2 lg:max-w-[250px] xl:max-w-[340px]">
-          <div className="flex items-center justify-between gap-4">
-            <p className="flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-mist/70 sm:text-sm">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#B600A8]" aria-hidden="true" />
-              {profile.role}
-            </p>
-            {/* Phones and tablets: the music rides along with the role line instead. */}
-            <SoundControls sound={sound} className="-my-2 !bg-transparent !p-0 lg:hidden [&>div:first-child]:hidden" />
-          </div>
-          <p className="font-normal leading-snug text-mist" style={{ fontSize: 'clamp(1.05rem, 1.6vw, 1.5rem)' }}>
-            {profile.tagline}
+      <div className="relative z-20 mt-auto grid grid-cols-12 items-end gap-x-6 gap-y-5 px-5 pb-6 sm:px-8 md:px-10 md:pb-9">
+        <FadeIn delay={0.35} y={16} className="col-span-12 flex flex-col gap-3 lg:col-span-4">
+          <p className="label flex items-center gap-2 text-muted">
+            <span className="h-1.5 w-1.5 bg-signal" aria-hidden="true" />
+            {profile.role} — {profile.location}
           </p>
+          <p className="max-w-[26ch] text-lg leading-snug text-bone sm:text-xl xl:text-2xl">{profile.tagline}</p>
+          <div className="mt-2 flex items-center gap-6">
+            <PrimaryButton href="#projects" className="min-w-[210px]">
+              View work <span aria-hidden="true">↓</span>
+            </PrimaryButton>
+            <ArrowLink href="#contact" className="text-bone">
+              Contact
+            </ArrowLink>
+          </div>
         </FadeIn>
-        <FadeIn delay={0.5} y={20} className="grid grid-cols-[1fr_auto] gap-3 sm:flex sm:items-center lg:flex-col lg:items-end xl:flex-row xl:items-center">
-          <PrimaryButton href="#projects">
-            View my work <ArrowDown className="h-4 w-4" />
-          </PrimaryButton>
-          <GhostButton href="#contact">Contact</GhostButton>
+        <FadeIn delay={0.6} y={16} className="col-span-12 flex flex-col items-start gap-1 lg:col-span-4 lg:col-start-9 lg:items-end">
+          <p className="label hidden text-muted lg:block">
+            Now — {now.role}, {now.company}
+          </p>
+          <SoundControls sound={sound} />
         </FadeIn>
       </div>
     </section>
