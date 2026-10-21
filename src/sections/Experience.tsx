@@ -1,16 +1,13 @@
 import { FadeIn } from '../components/FadeIn'
 import { RollText } from '../components/RollText'
+import { SectionHeading } from '../components/SectionHeading'
 import { experience } from '../data/experience'
 import { education } from '../data/profile'
 
 export function Experience() {
   return (
     <section id="experience" className="rounded-t-[40px] bg-white px-5 py-20 text-ink sm:rounded-t-[50px] sm:px-8 sm:py-24 md:rounded-t-[60px] md:px-10 md:py-32">
-      <FadeIn as="h2" y={40} className="mb-16 text-center font-black uppercase leading-none tracking-tight sm:mb-20 md:mb-28">
-        <span style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}>
-          <RollText text="Experience" />
-        </span>
-      </FadeIn>
+      <SectionHeading eyebrow="Where I've worked" title="Experience" dark />
 
       <ol className="mx-auto max-w-5xl">
         {experience.map((e, i) => (
@@ -28,12 +25,12 @@ export function Experience() {
                 <h3 className="font-medium uppercase leading-tight" style={{ fontSize: 'clamp(1rem, 2.2vw, 2.1rem)' }}>
                   <RollText text={e.role} />
                 </h3>
-                <span className="shrink-0 text-xs uppercase tracking-widest opacity-60 sm:text-sm">{e.dates}</span>
+                <span className="shrink-0 text-xs uppercase tracking-widest opacity-70 sm:text-sm">{e.dates}</span>
               </div>
               <p className="text-sm font-medium uppercase tracking-wider sm:text-base">
                 {e.company} <span className="opacity-50">· {e.mode}</span>
               </p>
-              <p className="max-w-2xl font-light leading-relaxed opacity-60" style={{ fontSize: 'clamp(0.85rem, 1.6vw, 1.25rem)' }}>
+              <p className="max-w-2xl leading-relaxed opacity-70" style={{ fontSize: 'clamp(0.85rem, 1.6vw, 1.25rem)' }}>
                 {e.summary}
               </p>
             </div>

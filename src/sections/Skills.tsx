@@ -1,15 +1,11 @@
 import { FadeIn } from '../components/FadeIn'
-import { RollText } from '../components/RollText'
+import { SectionHeading } from '../components/SectionHeading'
 import { skills } from '../data/skills'
 
 export function Skills() {
   return (
     <section className="relative z-10 -mt-10 rounded-t-[40px] bg-ink px-5 py-20 sm:-mt-12 sm:rounded-t-[50px] sm:px-8 sm:py-24 md:-mt-14 md:rounded-t-[60px] md:px-10 md:py-32">
-      <FadeIn as="h2" y={40} className="hero-heading mb-16 text-center font-black uppercase leading-none tracking-tight sm:mb-20 md:mb-24">
-        <span style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}>
-          <RollText text="Skills" />
-        </span>
-      </FadeIn>
+      <SectionHeading eyebrow="What I work with" title="Skills" />
 
       <div className="mx-auto grid max-w-6xl gap-3 sm:grid-cols-2 lg:grid-cols-6">
         {skills.map((g, i) => (
@@ -22,7 +18,7 @@ export function Skills() {
               <h3 className="text-xl font-medium uppercase tracking-wide text-mist sm:text-2xl">{g.name}</h3>
               <span className="hero-heading text-4xl font-black sm:text-5xl">{String(i + 1).padStart(2, '0')}</span>
             </div>
-            <p className="font-light leading-relaxed text-mist/60">{g.blurb}</p>
+            <p className="leading-relaxed text-mist/70">{g.blurb}</p>
             <ul className="mt-auto flex flex-wrap gap-2">
               {g.items.map((s) => (
                 <li key={s} className="rounded-full bg-mist/10 px-3 py-1 text-sm text-mist">

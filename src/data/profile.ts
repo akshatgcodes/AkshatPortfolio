@@ -4,7 +4,7 @@ export const profile = {
   firstName: 'Akshat',
   fullName: 'Akshat Gupta',
   role: 'Full-Stack Developer',
-  tagline: 'i break things in localhost so they never break in production',
+  tagline: 'I break things in localhost so they never break in production.',
   location: 'Delhi, India',
   photo: '/akshat.webp',
   about:

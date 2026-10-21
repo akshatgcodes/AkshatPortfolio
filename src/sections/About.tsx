@@ -1,9 +1,9 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { Braces, Database, Rocket, Terminal, type LucideIcon } from 'lucide-react'
 import { AnimatedText } from '../components/AnimatedText'
-import { ContactButton } from '../components/Buttons'
+import { GhostButton } from '../components/Buttons'
 import { FadeIn } from '../components/FadeIn'
-import { RollText } from '../components/RollText'
+import { SectionHeading } from '../components/SectionHeading'
 import { profile } from '../data/profile'
 
 const tiles: { Icon: LucideIcon; pos: string; size: string; x: number; delay: number; rotate: number }[] = [
@@ -33,7 +33,7 @@ function Tile({ Icon, rotate, index }: { Icon: LucideIcon; rotate: number; index
 
 export function About() {
   return (
-    <section id="about" className="relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-20 sm:px-8 md:px-10">
+    <section id="about" className="relative flex min-h-[90svh] items-center justify-center overflow-hidden px-5 py-20 sm:px-8 sm:py-24 md:px-10 md:py-32">
       {tiles.map((t, i) => (
         <div key={i} className={`absolute ${t.pos} ${t.size}`} aria-hidden="true">
           <FadeIn delay={t.delay} x={t.x} y={0} duration={0.9}>
@@ -42,13 +42,9 @@ export function About() {
         </div>
       ))}
 
-      <div className="relative z-10 flex flex-col items-center gap-16 sm:gap-20 md:gap-24">
-        <div className="flex flex-col items-center gap-10 sm:gap-14 md:gap-16">
-          <FadeIn as="h2" y={40} className="hero-heading text-center font-black uppercase leading-none tracking-tight" >
-            <span style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}>
-              <RollText text="About me" />
-            </span>
-          </FadeIn>
+      <div className="relative z-10 flex flex-col items-center gap-12 sm:gap-16">
+        <div className="flex flex-col items-center gap-8 sm:gap-10">
+          <SectionHeading eyebrow="Who I am" title="About me" className="" />
           <AnimatedText
             text={profile.about}
             className="max-w-[560px] text-center font-medium leading-relaxed text-mist"
@@ -63,7 +59,7 @@ export function About() {
           </FadeIn>
         </div>
         <FadeIn>
-          <ContactButton />
+          <GhostButton href="#projects">See what I&apos;ve built</GhostButton>
         </FadeIn>
       </div>
     </section>

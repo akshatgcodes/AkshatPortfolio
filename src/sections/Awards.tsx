@@ -1,18 +1,15 @@
 import { ArrowUpRight, Trophy } from 'lucide-react'
 import { GithubIcon } from '../components/BrandIcons'
-import { GhostButton } from '../components/Buttons'
+import { GhostButton, SolidButton } from '../components/Buttons'
 import { FadeIn } from '../components/FadeIn'
 import { RollText } from '../components/RollText'
+import { SectionHeading } from '../components/SectionHeading'
 import { achievements } from '../data/achievements'
 
 export function Awards() {
   return (
-    <section className="rounded-t-[40px] bg-white px-5 pb-32 pt-20 text-ink sm:rounded-t-[50px] sm:px-8 sm:pt-24 md:rounded-t-[60px] md:px-10 md:pb-40 md:pt-32">
-      <FadeIn as="h2" y={40} className="mb-16 text-center font-black uppercase leading-none tracking-tight sm:mb-20 md:mb-24">
-        <span style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}>
-          <RollText text="Awards" />
-        </span>
-      </FadeIn>
+    <section className="rounded-t-[40px] bg-white px-5 pb-32 pt-20 text-ink sm:rounded-t-[50px] sm:px-8 sm:pt-24 md:rounded-t-[60px] md:px-10 md:pb-44 md:pt-32">
+      <SectionHeading eyebrow="Recognition" title="Awards" dark />
 
       <div className="mx-auto flex max-w-6xl flex-col gap-6">
         {achievements.map((a) => (
@@ -36,7 +33,7 @@ export function Awards() {
                 <p className="text-xl font-medium uppercase sm:text-2xl">
                   <RollText text={a.project} />
                 </p>
-                <p className="mt-2 font-light leading-relaxed opacity-70">{a.projectBlurb}</p>
+                <p className="mt-2 leading-relaxed opacity-75">{a.projectBlurb}</p>
               </div>
               <dl className="grid grid-cols-2 gap-4 text-sm">
                 <div>
@@ -56,9 +53,9 @@ export function Awards() {
                 ))}
               </ul>
               <div className="mt-auto flex flex-wrap gap-3">
-                <GhostButton href={a.live} dark>
+                <SolidButton href={a.live} dark>
                   Live <ArrowUpRight className="h-4 w-4" />
-                </GhostButton>
+                </SolidButton>
                 <GhostButton href={a.repo} dark>
                   <GithubIcon className="h-4 w-4" /> Team repo
                 </GhostButton>

@@ -2,9 +2,10 @@ import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion
 import { ArrowUpRight } from 'lucide-react'
 import { useRef } from 'react'
 import { GithubIcon as Github } from '../components/BrandIcons'
-import { GhostButton } from '../components/Buttons'
+import { GhostButton, SolidButton } from '../components/Buttons'
 import { FadeIn } from '../components/FadeIn'
 import { RollText } from '../components/RollText'
+import { SectionHeading } from '../components/SectionHeading'
 import { projects, type Project } from '../data/projects'
 
 const featured = projects.filter((p) => p.featured)
@@ -33,9 +34,9 @@ function StackCard({ project, index, total, progress }: { project: Project; inde
             </div>
           </div>
           <div className="flex flex-wrap gap-2 sm:gap-3">
-            <GhostButton href={project.live}>
-              Live <ArrowUpRight className="h-4 w-4" />
-            </GhostButton>
+            <SolidButton href={project.live}>
+              Live site <ArrowUpRight className="h-4 w-4" />
+            </SolidButton>
             <GhostButton href={project.repo}>
               <Github className="h-4 w-4" /> Code
             </GhostButton>
@@ -43,7 +44,7 @@ function StackCard({ project, index, total, progress }: { project: Project; inde
         </div>
 
         <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-8">
-          <p className="max-w-2xl text-sm font-light leading-relaxed text-mist/70 sm:text-base">{project.description}</p>
+          <p className="max-w-2xl text-[15px] leading-relaxed text-mist/80 sm:text-base">{project.description}</p>
           <ul className="flex flex-wrap gap-1.5 md:max-w-[40%] md:justify-end">
             {project.stack.map((s) => (
               <li key={s} className="rounded-full border border-mist/20 px-2.5 py-0.5 text-xs text-mist/80">
@@ -94,12 +95,8 @@ export function Projects() {
   const { scrollYProgress } = useScroll({ target: container, offset: ['start start', 'end end'] })
 
   return (
-    <section id="projects" className="bg-ink px-4 pb-16 sm:px-8 md:px-10">
-      <FadeIn as="h2" y={40} className="hero-heading pb-6 text-center font-black uppercase leading-none tracking-tight">
-        <span style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}>
-          <RollText text="Projects" />
-        </span>
-      </FadeIn>
+    <section id="projects" className="bg-ink px-4 pb-16 pt-20 sm:px-8 sm:pt-24 md:px-10 md:pt-32">
+      <SectionHeading eyebrow="Selected work" title="Projects" />
 
       <div ref={container} className="pb-[12vh]">
         {featured.map((p, i) => (
@@ -131,7 +128,7 @@ export function Projects() {
                     </h4>
                     <span className="text-xs uppercase tracking-widest text-mist/50">{p.category}</span>
                   </div>
-                  <p className="text-sm font-light leading-relaxed text-mist/65">{p.description}</p>
+                  <p className="text-sm leading-relaxed text-mist/75">{p.description}</p>
                   <p className="text-xs text-mist/50">{p.stack.join(' · ')}</p>
                   <div className="mt-auto flex gap-4 pt-2 text-sm font-medium uppercase tracking-widest text-mist">
                     <a href={p.live} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1">

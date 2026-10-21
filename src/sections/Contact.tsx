@@ -1,7 +1,7 @@
 import { Check, Copy, Mail } from 'lucide-react'
 import { useState } from 'react'
 import { GithubIcon, LinkedinIcon } from '../components/BrandIcons'
-import { ContactButton } from '../components/Buttons'
+import { GhostButton, PrimaryButton } from '../components/Buttons'
 import { FadeIn } from '../components/FadeIn'
 import { RollText } from '../components/RollText'
 import { profile, socials } from '../data/profile'
@@ -35,17 +35,17 @@ export function Contact() {
             <RollText text="Let's talk" />
           </span>
         </FadeIn>
-        <FadeIn delay={0.1} as="p" className="max-w-xl font-light leading-relaxed text-mist/70" >
+        <FadeIn delay={0.1} as="p" className="max-w-xl leading-relaxed text-mist/75">
           <span style={{ fontSize: 'clamp(1rem, 1.8vw, 1.25rem)' }}>
             Open to internships, full-time roles and interesting side projects. The fastest way to reach me is email.
           </span>
         </FadeIn>
         <FadeIn delay={0.2} className="flex flex-col items-center gap-5">
-          <ContactButton href={`mailto:${socials.email}`}>
+          <PrimaryButton href={`mailto:${socials.email}`}>
             <span className="inline-flex items-center gap-2">
               <Mail className="h-4 w-4" /> {socials.email}
             </span>
-          </ContactButton>
+          </PrimaryButton>
           <button
             type="button"
             onClick={copy}
@@ -57,15 +57,9 @@ export function Contact() {
         </FadeIn>
         <FadeIn delay={0.3} className="flex gap-3">
           {links.map(({ label, href, Icon }) => (
-            <a
-              key={label}
-              href={href}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border-2 border-mist px-6 py-2.5 text-sm font-medium uppercase tracking-widest text-mist transition-colors hover:bg-mist/10"
-            >
-              <Icon className="h-4 w-4" /> <RollText text={label} />
-            </a>
+            <GhostButton key={label} href={href}>
+              <Icon className="h-4 w-4" /> {label}
+            </GhostButton>
           ))}
         </FadeIn>
       </div>

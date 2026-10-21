@@ -52,10 +52,11 @@ export default function App() {
         <Hero key={intro ? 'behind-intro' : 'live'} onMenu={openMenu} />
         <Marquee />
         <About />
-        <Experience />
-        <Skills />
+        {/* Proof first: work and activity, then the CV-style sections. */}
         <Projects />
         <GithubActivity />
+        <Experience />
+        <Skills />
         <Awards />
         <Contact />
       </main>
