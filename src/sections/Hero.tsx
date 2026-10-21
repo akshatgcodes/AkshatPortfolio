@@ -1,5 +1,6 @@
 import { ContactButton } from '../components/Buttons'
 import { FadeIn } from '../components/FadeIn'
+import { HeroWidgets } from '../components/HeroWidgets'
 import { Magnet } from '../components/Magnet'
 import { MenuButton } from '../components/Nav'
 import { navLinks } from '../data/nav'
@@ -49,6 +50,8 @@ export function Hero({ onMenu }: { onMenu: () => void }) {
           </Magnet>
         </FadeIn>
       </div>
+
+      <HeroWidgets />
 
       <div className="relative z-20 mt-auto flex items-end justify-between gap-4 px-6 pb-7 sm:pb-8 md:px-10 md:pb-10">
         <FadeIn

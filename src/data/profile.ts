@@ -25,3 +25,18 @@ export const socials = {
   linkedin: 'https://www.linkedin.com/in/akshatgcodes/',
   website: 'https://akshatgcodes.in',
 }
+
+// Hero widgets.
+export const nowPlaying = {
+  title: 'Compass',
+  artist: 'The Neighbourhood',
+  cover: '/now-playing.webp',
+  durationSec: 168,
+  link: 'https://open.spotify.com/search/compass%20the%20neighbourhood',
+}
+
+export const terminalScript = [
+  { cmd: 'npm run dev', out: '✓ ready in 312ms' },
+  { cmd: 'git push origin main', out: '🚀 deployed to akshatgcodes.in' },
+  { cmd: 'whoami', out: 'akshat · full-stack developer' },
+]

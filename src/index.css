@@ -43,3 +43,12 @@ html.custom-cursor,
 html.custom-cursor * {
   cursor: none !important;
 }
+
+@keyframes eq {
+  from {
+    transform: scaleY(0.25);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
