@@ -1,7 +1,7 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { Loader2, Pause, Play } from 'lucide-react'
+import { Loader2, Pause, Play, SkipForward } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { nowPlaying } from '../data/profile'
+import { playlist } from '../data/profile'
 
 type PlayState = 'idle' | 'loading' | 'playing' | 'paused' | 'error'
 
@@ -9,14 +9,19 @@ const BAR = 4
 const GAP = 5
 const STOPS = ['#BE4C00', '#B600A8', '#7621B0']
 
-// The preview URL is looked up on first play rather than hardcoded, since Apple rotates them.
-async function previewUrl() {
-  const res = await fetch(`https://itunes.apple.com/lookup?id=${nowPlaying.itunesId}`)
+// Preview URLs are looked up (in one request) on first play rather than hardcoded, since
+// Apple rotates them. Tracks without a preview are dropped from the rotation.
+async function previewUrls() {
+  const res = await fetch(`https://itunes.apple.com/lookup?id=${playlist.map((t) => t.itunesId).join(',')}`)
   const data = await res.json()
-  const url = data.results?.[0]?.previewUrl
-  if (!url) throw new Error('no preview')
-  return url as string
+  const byId = new Map<number, string>(data.results.filter((r: { previewUrl?: string }) => r.previewUrl).map((r: { trackId: number; previewUrl: string }) => [r.trackId, r.previewUrl]))
+  const tracks = playlist.flatMap((t) => (byId.has(t.itunesId) ? [{ ...t, url: byId.get(t.itunesId)! }] : []))
+  if (!tracks.length) throw new Error('no previews')
+  return tracks
 }
+
+type Track = Awaited<ReturnType<typeof previewUrls>>[number]
+const FADE = 0.35
 
 // Sound bars behind the hero portrait. Idle they breathe on a sine; while the song preview
 // plays they follow its real frequency data through a Web Audio analyser.
@@ -24,6 +29,10 @@ export function HeroSound() {
   const canvas = useRef<HTMLCanvasElement>(null)
   const audio = useRef<HTMLAudioElement | null>(null)
   const analyser = useRef<AnalyserNode | null>(null)
+  const gain = useRef<GainNode | null>(null)
+  const tracks = useRef<Track[]>([])
+  const trackIndex = useRef(0)
+  const [index, setIndex] = useState(0)
   const [state, setState] = useState<PlayState>('idle')
   const still = useReducedMotion()
 
@@ -94,33 +103,57 @@ export function HeroSound() {
 
   useEffect(() => () => audio.current?.pause(), [])
 
+  // Builds the audio graph once: element -> gain (for fades) -> analyser (for the bars) -> speakers.
+  const setup = async () => {
+    tracks.current = await previewUrls()
+    const a = new Audio()
+    a.crossOrigin = 'anonymous'
+    a.volume = 0.6
+    a.onplay = () => setState('playing')
+    a.onpause = () => !a.ended && setState('paused')
+    a.onended = () => load(trackIndex.current + 1)
+    const ac = new AudioContext()
+    const g = ac.createGain()
+    const node = ac.createAnalyser()
+    node.fftSize = 256
+    node.smoothingTimeConstant = 0.8
+    ac.createMediaElementSource(a).connect(g).connect(node).connect(ac.destination)
+    audio.current = a
+    gain.current = g
+    analyser.current = node
+  }
+
+  const load = async (i: number) => {
+    const a = audio.current!
+    const g = gain.current!
+    const next = (i + tracks.current.length) % tracks.current.length
+    trackIndex.current = next
+    setIndex(playlist.findIndex((t) => t.itunesId === tracks.current[next].itunesId))
+    a.src = tracks.current[next].url
+    g.gain.setValueAtTime(0, g.context.currentTime)
+    g.gain.linearRampToValueAtTime(1, g.context.currentTime + FADE)
+    await a.play()
+  }
+
   const toggle = async () => {
-    if (state === 'playing') {
-      audio.current?.pause()
-      return
-    }
     try {
+      if (state === 'playing') return audio.current?.pause()
       if (!audio.current) {
         setState('loading')
-        const a = new Audio()
-        a.crossOrigin = 'anonymous'
-        a.src = await previewUrl()
-        a.volume = 0.6
-        a.onplay = () => setState('playing')
-        a.onpause = () => setState('paused')
-        a.onended = () => setState('idle')
-        const ac = new AudioContext()
-        const node = ac.createAnalyser()
-        node.fftSize = 256
-        node.smoothingTimeConstant = 0.8
-        ac.createMediaElementSource(a).connect(node).connect(ac.destination)
-        audio.current = a
-        analyser.current = node
+        await setup()
+        return await load(0)
       }
       await audio.current.play()
     } catch {
       setState('error')
     }
+  }
+
+  const skip = () => {
+    const g = gain.current
+    if (!g) return
+    g.gain.linearRampToValueAtTime(0, g.context.currentTime + FADE)
+    setTimeout(() => load(trackIndex.current + 1).catch(() => setState('error')), FADE * 1000)
   }
 
   const playing = state === 'playing'
@@ -132,6 +165,7 @@ export function HeroSound() {
         <AnimatePresence>
           {(playing || state === 'error') && (
             <motion.span
+              key={index}
               initial={{ opacity: 0, x: 10 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 10 }}
@@ -139,9 +173,9 @@ export function HeroSound() {
             >
               {state === 'error' ? 'Preview unavailable' : (
                 <>
-                  {nowPlaying.title}
+                  {playlist[index].title}
                   <br />
-                  <span className="text-mist/40">{nowPlaying.artist}</span>
+                  <span className="text-mist/40">{playlist[index].artist}</span>
                 </>
               )}
             </motion.span>
@@ -151,11 +185,21 @@ export function HeroSound() {
           type="button"
           onClick={toggle}
           disabled={state === 'loading'}
-          aria-label={playing ? 'Pause music' : `Play a 30-second preview of ${nowPlaying.title} by ${nowPlaying.artist}`}
+          aria-label={playing ? 'Pause music' : 'Play music: 30-second song previews'}
           className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-mist/70 text-mist transition-colors hover:bg-mist/10 md:h-12 md:w-12"
         >
           <Icon className={`h-4 w-4 ${state === 'loading' ? 'animate-spin' : 'fill-current'}`} />
         </button>
+        {(state === 'playing' || state === 'paused') && (
+          <button
+            type="button"
+            onClick={skip}
+            aria-label="Next song"
+            className="-ml-1 flex h-9 w-9 items-center justify-center rounded-full text-mist/70 transition-colors hover:bg-mist/10 hover:text-mist"
+          >
+            <SkipForward className="h-4 w-4 fill-current" />
+          </button>
+        )}
       </div>
     </>
   )
