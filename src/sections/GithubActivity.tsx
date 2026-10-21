@@ -36,13 +36,34 @@ async function load(): Promise<Data> {
   return { total: contrib.total.lastYear, weeks, repos: own.slice(0, 5), repoCount: own.length }
 }
 
+// GitHub allows 60 unauthenticated requests an hour per visitor, so keep a copy for 30 minutes
+// instead of refetching on every reload. Storage can throw in private modes; then just fetch.
+const CACHE_KEY = 'gh-activity'
+const CACHE_MS = 30 * 60 * 1000
+
+async function cachedLoad(): Promise<Data> {
+  try {
+    const hit = JSON.parse(sessionStorage.getItem(CACHE_KEY) ?? 'null')
+    if (hit && Date.now() - hit.at < CACHE_MS) return hit.data
+  } catch {
+    /* fall through to a fresh fetch */
+  }
+  const data = await load()
+  try {
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), data }))
+  } catch {
+    /* not cached, fine */
+  }
+  return data
+}
+
 export function GithubActivity() {
   const [data, setData] = useState<Data | null>(null)
   const [failed, setFailed] = useState(false)
   const graph = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    load().then(setData, () => setFailed(true))
+    cachedLoad().then(setData, () => setFailed(true))
   }, [])
 
   // On narrow screens the graph scrolls sideways; start at the most recent weeks.
