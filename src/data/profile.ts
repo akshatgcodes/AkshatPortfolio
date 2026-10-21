@@ -31,7 +31,8 @@ export const nowPlaying = {
   title: 'Compass',
   artist: 'The Neighbourhood',
   cover: '/now-playing.webp',
-  durationSec: 168,
+  // Apple Music track id; its free 30s preview is what the play button streams.
+  itunesId: 1440532827,
   link: 'https://open.spotify.com/search/compass%20the%20neighbourhood',
 }
 

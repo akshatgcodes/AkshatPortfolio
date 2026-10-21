@@ -1,5 +1,6 @@
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform, type MotionValue } from 'framer-motion'
-import { useEffect, useState, type ReactNode } from 'react'
+import { Loader2, Pause, Play } from 'lucide-react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { experience } from '../data/experience'
 import { nowPlaying, terminalScript } from '../data/profile'
 
@@ -72,51 +73,96 @@ function Terminal() {
 
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
 
+type PlayState = 'idle' | 'loading' | 'playing' | 'paused' | 'error'
+
+// The preview URL is looked up on first play rather than hardcoded, since Apple rotates them.
+async function previewUrl() {
+  const res = await fetch(`https://itunes.apple.com/lookup?id=${nowPlaying.itunesId}`)
+  const data = await res.json()
+  const url = data.results?.[0]?.previewUrl
+  if (!url) throw new Error('no preview')
+  return url as string
+}
+
 function NowPlaying() {
-  const still = useReducedMotion()
-  const [elapsed, setElapsed] = useState(54)
+  const audio = useRef<HTMLAudioElement | null>(null)
+  const [state, setState] = useState<PlayState>('idle')
+  const [time, setTime] = useState({ now: 0, total: 30 })
 
-  useEffect(() => {
-    if (still) return
-    const id = setInterval(() => setElapsed((e) => (e + 1) % nowPlaying.durationSec), 1000)
-    return () => clearInterval(id)
-  }, [still])
+  useEffect(() => () => audio.current?.pause(), [])
 
+  const toggle = async () => {
+    if (state === 'playing') {
+      audio.current?.pause()
+      return
+    }
+    try {
+      if (!audio.current) {
+        setState('loading')
+        const a = new Audio(await previewUrl())
+        a.volume = 0.6
+        a.onplay = () => setState('playing')
+        a.onpause = () => setState('paused')
+        a.onended = () => {
+          setState('idle')
+          setTime((t) => ({ ...t, now: 0 }))
+        }
+        a.ontimeupdate = () => setTime({ now: a.currentTime, total: a.duration || 30 })
+        audio.current = a
+      }
+      await audio.current.play()
+    } catch {
+      setState('error')
+    }
+  }
+
+  const playing = state === 'playing'
+  const Icon = state === 'loading' ? Loader2 : playing ? Pause : Play
   return (
-    <a
-      href={nowPlaying.link}
-      target="_blank"
-      rel="noreferrer"
-      aria-label={`On repeat: ${nowPlaying.title} by ${nowPlaying.artist}`}
-      className={`${glass} block w-[220px] p-3 xl:w-[290px]`}
-    >
+    <div className={`${glass} w-[220px] p-3 xl:w-[290px]`}>
       <p className="mb-2.5 flex items-center justify-between text-[10px] font-medium uppercase tracking-[0.2em] text-mist/50">
-        On repeat
+        {state === 'error' ? 'Preview unavailable' : playing ? 'Now playing · preview' : 'On repeat'}
         <span className="flex h-3 items-end gap-[2px]" aria-hidden="true">
           {[0.9, 0.5, 1, 0.65].map((h, i) => (
             <span
               key={i}
               className="w-[3px] rounded-full bg-[#1ed760]"
-              style={{ height: `${h * 100}%`, transformOrigin: 'bottom', animation: still ? undefined : `eq 0.${7 + i}s ease-in-out ${i * 0.12}s infinite alternate` }}
+              style={{
+                height: `${h * 100}%`,
+                transformOrigin: 'bottom',
+                transform: playing ? undefined : 'scaleY(0.3)',
+                animation: playing ? `eq 0.${7 + i}s ease-in-out ${i * 0.12}s infinite alternate` : undefined,
+              }}
             />
           ))}
         </span>
       </p>
       <div className="flex items-center gap-3">
-        <img src={nowPlaying.cover} alt="" width={52} height={52} className="h-[52px] w-[52px] rounded-lg object-cover" />
-        <div className="min-w-0">
+        <button
+          type="button"
+          onClick={toggle}
+          disabled={state === 'loading'}
+          aria-label={playing ? `Pause ${nowPlaying.title} preview` : `Play 30-second preview of ${nowPlaying.title}`}
+          className="group relative h-[52px] w-[52px] shrink-0 overflow-hidden rounded-lg"
+        >
+          <img src={nowPlaying.cover} alt="" width={52} height={52} className="h-full w-full object-cover" />
+          <span className="absolute inset-0 flex items-center justify-center bg-black/45 transition-colors group-hover:bg-black/30">
+            <Icon className={`h-5 w-5 fill-white text-white ${state === 'loading' ? 'animate-spin fill-transparent' : ''}`} />
+          </span>
+        </button>
+        <a href={nowPlaying.link} target="_blank" rel="noreferrer" className="min-w-0 hover:opacity-80">
           <p className="truncate text-base font-medium leading-tight text-mist">{nowPlaying.title}</p>
           <p className="truncate text-sm font-light text-mist/60">{nowPlaying.artist}</p>
-        </div>
+        </a>
       </div>
       <div className="mt-3 flex items-center gap-2 text-[10px] tabular-nums text-mist/50">
-        {fmt(elapsed)}
+        {fmt(time.now)}
         <span className="relative h-1 flex-1 overflow-hidden rounded-full bg-mist/15">
-          <span className="absolute inset-y-0 left-0 rounded-full bg-mist" style={{ width: `${(elapsed / nowPlaying.durationSec) * 100}%` }} />
+          <span className="absolute inset-y-0 left-0 rounded-full bg-mist" style={{ width: `${(time.now / time.total) * 100}%` }} />
         </span>
-        {fmt(nowPlaying.durationSec)}
+        {fmt(time.total)}
       </div>
-    </a>
+    </div>
   )
 }
 
