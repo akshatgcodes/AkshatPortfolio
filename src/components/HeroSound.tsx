@@ -149,11 +149,20 @@ export function HeroSound() {
     }
   }
 
-  const skip = () => {
-    const g = gain.current
-    if (!g) return
-    g.gain.linearRampToValueAtTime(0, g.context.currentTime + FADE)
-    setTimeout(() => load(trackIndex.current + 1).catch(() => setState('error')), FADE * 1000)
+  const skip = async () => {
+    try {
+      const g = gain.current
+      if (!g) {
+        setState('loading')
+        await setup()
+        return await load(1)
+      }
+      g.gain.linearRampToValueAtTime(0, g.context.currentTime + FADE)
+      await new Promise((r) => setTimeout(r, FADE * 1000))
+      await load(trackIndex.current + 1)
+    } catch {
+      setState('error')
+    }
   }
 
   const playing = state === 'playing'
@@ -161,45 +170,53 @@ export function HeroSound() {
   return (
     <>
       <canvas ref={canvas} aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full" />
-      <div className="absolute bottom-[96px] right-6 z-20 flex items-center gap-3 sm:bottom-[112px] md:bottom-[128px] md:right-10">
-        <AnimatePresence>
-          {(playing || state === 'error') && (
-            <motion.span
-              key={index}
-              initial={{ opacity: 0, x: 10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 10 }}
-              className="text-right text-[10px] uppercase leading-tight tracking-[0.2em] text-mist/60 sm:text-xs"
-            >
-              {state === 'error' ? 'Preview unavailable' : (
-                <>
-                  {playlist[index].title}
-                  <br />
-                  <span className="text-mist/40">{playlist[index].artist}</span>
-                </>
-              )}
-            </motion.span>
-          )}
-        </AnimatePresence>
-        <button
-          type="button"
-          onClick={toggle}
-          disabled={state === 'loading'}
-          aria-label={playing ? 'Pause music' : 'Play music: 30-second song previews'}
-          className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-mist/70 text-mist transition-colors hover:bg-mist/10 md:h-12 md:w-12"
-        >
-          <Icon className={`h-4 w-4 ${state === 'loading' ? 'animate-spin' : 'fill-current'}`} />
-        </button>
-        {(state === 'playing' || state === 'paused') && (
+      <div className="absolute bottom-[96px] right-6 z-20 sm:bottom-[112px] md:bottom-[128px] md:right-10">
+        {/* Sits to the left of the controls without pushing them around as titles change. */}
+        <div className="absolute right-full top-1/2 mr-3 -translate-y-1/2 whitespace-nowrap text-right text-[10px] uppercase leading-tight tracking-[0.2em] sm:text-xs">
+          <AnimatePresence mode="wait">
+            {(state === 'playing' || state === 'paused' || state === 'error') && (
+              <motion.p
+                key={state === 'error' ? 'error' : index}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.25 }}
+                className="text-mist/60"
+              >
+                {state === 'error' ? (
+                  'Preview unavailable'
+                ) : (
+                  <>
+                    {playlist[index].title}
+                    <br />
+                    <span className="text-mist/40">{playlist[index].artist}</span>
+                  </>
+                )}
+              </motion.p>
+            )}
+          </AnimatePresence>
+        </div>
+        <div className="flex items-center rounded-full border-2 border-mist/70 text-mist">
+          <button
+            type="button"
+            onClick={toggle}
+            disabled={state === 'loading'}
+            aria-label={playing ? 'Pause music' : 'Play music: 30-second song previews'}
+            className="flex h-10 w-11 items-center justify-center rounded-l-full transition-colors hover:bg-mist/10 md:h-11 md:w-12"
+          >
+            <Icon className={`h-4 w-4 ${state === 'loading' ? 'animate-spin' : 'fill-current'}`} />
+          </button>
+          <span className="h-5 w-px bg-mist/30" aria-hidden="true" />
           <button
             type="button"
             onClick={skip}
+            disabled={state === 'loading'}
             aria-label="Next song"
-            className="-ml-1 flex h-9 w-9 items-center justify-center rounded-full text-mist/70 transition-colors hover:bg-mist/10 hover:text-mist"
+            className="flex h-10 w-11 items-center justify-center rounded-r-full transition-colors hover:bg-mist/10 md:h-11 md:w-12"
           >
             <SkipForward className="h-4 w-4 fill-current" />
           </button>
-        )}
+        </div>
       </div>
     </>
   )
