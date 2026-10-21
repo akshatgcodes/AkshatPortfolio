@@ -26,18 +26,10 @@ export const socials = {
   website: 'https://akshatgcodes.in',
 }
 
-// Hero widgets.
+// Song behind the hero soundwaves.
 export const nowPlaying = {
   title: 'Compass',
   artist: 'The Neighbourhood',
-  cover: '/now-playing.webp',
   // Apple Music track id; its free 30s preview is what the play button streams.
   itunesId: 1440532827,
-  link: 'https://open.spotify.com/search/compass%20the%20neighbourhood',
 }
-
-export const terminalScript = [
-  { cmd: 'npm run dev', out: '✓ ready in 312ms' },
-  { cmd: 'git push origin main', out: '🚀 deployed to akshatgcodes.in' },
-  { cmd: 'whoami', out: 'akshat · full-stack developer' },
-]

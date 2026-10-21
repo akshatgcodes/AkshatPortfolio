@@ -1,6 +1,6 @@
 import { ContactButton } from '../components/Buttons'
 import { FadeIn } from '../components/FadeIn'
-import { HeroWidgets } from '../components/HeroWidgets'
+import { HeroSound } from '../components/HeroSound'
 import { Magnet } from '../components/Magnet'
 import { MenuButton } from '../components/Nav'
 import { navLinks } from '../data/nav'
@@ -34,6 +34,8 @@ export function Hero({ onMenu }: { onMenu: () => void }) {
         </FadeIn>
       </div>
 
+      <HeroSound />
+
       {/* Positioning lives on a plain wrapper: FadeIn animates transform and would clobber the translate classes. */}
       <div className="absolute left-1/2 top-1/2 z-10 w-[280px] -translate-x-1/2 -translate-y-1/2 sm:bottom-0 sm:top-auto sm:w-[min(360px,60svh)] sm:translate-y-0 md:w-[min(440px,60svh)] lg:w-[min(520px,62svh)]">
         <FadeIn delay={0.6} y={30}>
@@ -50,8 +52,6 @@ export function Hero({ onMenu }: { onMenu: () => void }) {
           </Magnet>
         </FadeIn>
       </div>
-
-      <HeroWidgets />
 
       <div className="relative z-20 mt-auto flex items-end justify-between gap-4 px-6 pb-7 sm:pb-8 md:px-10 md:pb-10">
         <FadeIn
