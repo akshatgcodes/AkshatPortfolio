@@ -4,12 +4,15 @@ import { HeroSound } from '../components/HeroSound'
 import { Magnet } from '../components/Magnet'
 import { MenuButton } from '../components/Nav'
 import { RollText } from '../components/RollText'
+import { Starfield } from '../components/Starfield'
 import { navLinks } from '../data/nav'
 import { profile } from '../data/profile'
 
 export function Hero({ onMenu }: { onMenu: () => void }) {
   return (
     <section className="relative flex h-[100svh] min-h-[620px] flex-col" style={{ overflowX: 'clip' }}>
+      <Starfield />
+
       <FadeIn as="nav" y={-20} className="relative z-20 flex justify-between px-6 pt-6 md:px-10 md:pt-8">
         {navLinks.map((l) => (
           <a
